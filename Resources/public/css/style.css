@@ -1,0 +1,13 @@
+.pager
+{ 
+    list-style: none;
+    
+    margin: 0px;
+    
+    padding: 0px;
+}
+
+.pager li
+{
+    display: inline;
+}

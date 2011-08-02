@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="makerlabs.templating.helper.pager.class">MakerLabs\PagerBundle\Templating\PagerHelper</parameter>
+        <parameter key="makerlabs.twig.extension.pager.class">MakerLabs\PagerBundle\Twig\Extension\PagerExtension</parameter>
+    </parameters>
+
+    <services>
+        <service id="makerlabs.twig.extension.pager" class="%makerlabs.twig.extension.pager.class%">
+            <argument type="service" id="router" />
+            <tag name="twig.extension" alias="pager" />
+        </service>        
+        <service id="makerlabs.templating.helper.pager" class="%makerlabs.templating.helper.pager.class%">
+            <tag name="templating.helper" alias="pager" />
+            <argument type="service" id="templating.engine.php" />
+        </service>
+    </services>
+
+</container>
