@@ -1,10 +1,22 @@
 <?php
+/*
+ * This file is part of the PagerBundle package.
+ *
+ * (c) Marcin Butlak <contact@maker-labs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace MakerLabs\PagerBundle\Adapter;
 
 use MakerLabs\PagerBundle\Adapter\PagerAdapterInterface;
 use Doctrine\ORM\QueryBuilder;
 
+/**
+ * 
+ * @author Marcin Butlak <contact@maker-labs.com>
+ */
 class DoctrineOrmAdapter implements PagerAdapterInterface
 {
    protected $query;
@@ -21,7 +33,6 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
    }
    
    /**
-    *
     * Returns the count query instance
     * 
     * @return QueryBuilder
@@ -37,7 +48,6 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
    }
    
    /**
-    *
     * Returns the total number of results
     * 
     * @return integer
@@ -53,11 +63,9 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
    }
    
    /**
-    *
     * Returns the list of results 
     * 
-    * @param integer $hydration_mode Doctrine hydration mode
-    * @return type 
+    * @return array 
     */
    public function getResults($offset, $limit)
    {

@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the PagerBundle package.
+ *
+ * (c) Marcin Butlak <contact@maker-labs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace MakerLabs\PagerBundle\Twig\Extension;
 
@@ -8,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 /**
- * FormExtension extends Twig with pager capabilities.
+ * PagerExtension extends Twig with pagination capabilities.
  *
  * @author Marcin Butlak <contact@maker-labs.com>
  */
