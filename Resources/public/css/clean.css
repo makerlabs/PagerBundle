@@ -1,0 +1,31 @@
+.pager
+{ 
+    list-style: none;
+    
+    margin: 0px;
+    
+    padding: 0px;
+}
+
+.pager li
+{
+    display: inline;
+        
+    padding: 0px;
+    
+    margin-right: 5px;
+}
+
+.pager a, 
+.pager b
+{
+    color: #aaa;
+    
+    text-decoration: none;
+}
+
+.pager a:hover,
+.pager b
+{
+    color: #ff9346;
+}
