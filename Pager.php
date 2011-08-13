@@ -83,6 +83,8 @@ class Pager
    public function setLimit($limit)
    {
       $this->limit = min($limit > 0 ? $limit : 1, $this->adapter->getTotalResults());
+      
+      $this->setPage($this->page);
 
       return $this;
    }
@@ -134,7 +136,7 @@ class Pager
     */
    public function getLastPage()
    {
-      return floor($this->adapter->getTotalResults() / $this->limit);
+      return ceil($this->adapter->getTotalResults() / $this->limit);
    }
 
    /**

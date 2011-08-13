@@ -107,10 +107,10 @@ class PagerTest extends \PHPUnit_Framework_TestCase
    {
       $this->adapter->expects($this->any())
               ->method('getResults')
-              ->with($this->equalTo(80), $this->equalTo(40));
+              ->with($this->equalTo(40), $this->equalTo(40));
       
       $this->pager->setPage(2)->setLimit(40);
-      
+                  
       $this->pager->getResults();
    }
    
