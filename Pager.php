@@ -202,6 +202,6 @@ class Pager
     */
    public function getResults()
    {
-      return $this->adapter->getResults($this->page * $this->limit, $this->limit);
+      return $this->adapter->getResults(($this->page - 1) * $this->limit, $this->limit);
    }
 }
