@@ -21,189 +21,202 @@ use MakerLabs\PagerBundle\Adapter\PagerAdapterInterface;
 class Pager
 {
 
-   /**
-    *
-    * @var int
-    */
-   protected $page = 1;
-   
-   /**
-    *
-    * @var int
-    */
-   protected $limit;
+    /**
+     *
+     * @var int
+     */
+    protected $page = 1;
 
-   /**
-    * Constructor
-    * 
-    * @param PagerAdapterInterface $adapter The pager adapter
-    * @param array $options Additional options
-    */
-   public function __construct(PagerAdapterInterface $adapter, array $options = array())
-   {
-      $this->adapter = $adapter;
+    /**
+     *
+     * @var int
+     */
+    protected $limit;
 
-      $this->setLimit(isset($options['limit']) ? $options['limit'] : 20);
+    /**
+     * Constructor
+     * 
+     * @param PagerAdapterInterface $adapter The pager adapter
+     * @param array $options Additional options
+     */
+    public function __construct(PagerAdapterInterface $adapter, array $options = array())
+    {
+        $this->adapter = $adapter;
 
-      if (isset($options['page']))
-      {
-         $this->setPage($options['page']);
-      }
-   }
+        $this->setLimit(isset($options['limit']) ? $options['limit'] : 20);
 
-   /**
-    * Sets the current page number
-    * 
-    * @param int $page The current page number
-    * @return Pager instance
-    */
-   public function setPage($page)
-   {
-      $this->page = min($page > 0 ? $page : $this->getFirstPage(), $this->getLastPage());
+        if (isset($options['page']))
+        {
+            $this->setPage($options['page']);
+        }
+    }
 
-      return $this;
-   }
+    /**
+     * Sets the current page number
+     * 
+     * @param int $page The current page number
+     * @return Pager instance
+     */
+    public function setPage($page)
+    {
+        $this->page = min($page > 0 ? $page : $this->getFirstPage(), $this->getLastPage());
 
-   /**
-    * Returns the current page number
-    * 
-    * @return int 
-    */
-   public function getPage()
-   {
-      return $this->page;
-   }
+        return $this;
+    }
 
-   /**
-    * Sets the results limit for one page
-    * 
-    * @param int $limit
-    * @return Pager instance
-    */
-   public function setLimit($limit)
-   {
-      $this->limit = min($limit > 0 ? $limit : 1, $this->adapter->getTotalResults());
-      
-      $this->setPage($this->page);
+    /**
+     * Returns the current page number
+     * 
+     * @return int 
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
 
-      return $this;
-   }
+    /**
+     * Sets the results limit for one page
+     * 
+     * @param int $limit
+     * @return Pager instance
+     */
+    public function setLimit($limit)
+    {
+        $this->limit = min($limit > 0 ? $limit : 1, $this->adapter->getTotalResults());
+        if ($limit <= 0)
+            $limit = 1;
 
-   /**
-    * Returns the current results limit for one page
-    *  
-    * @return int 
-    */
-   public function getLimit()
-   {
-      return $this->limit;
-   }
+        $this->setPage($this->page);
 
-   /**
-    * Returns the next page number
-    * 
-    * @return int 
-    */
-   public function getNextPage()
-   {
-      return $this->page < $this->getLastPage() ? $this->page + 1 : $this->getLastPage();
-   }
+        return $this;
+    }
 
-   /**
-    * Returns the previous page number
-    * 
-    * @return int 
-    */
-   public function getPreviousPage()
-   {
-      return $this->page > $this->getFirstPage() ? $this->page - 1 : $this->getFirstPage();
-   }
+    /**
+     * Returns the current results limit for one page
+     *  
+     * @return int 
+     */
+    public function getLimit()
+    {
+        return $this->limit;
+    }
 
-   /**
-    * Returns the first page number
-    * 
-    * @return int 
-    */
-   public function getFirstPage()
-   {
-      return 1;
-   }
+    /**
+     * Returns the next page number
+     * 
+     * @return int 
+     */
+    public function getNextPage()
+    {
+        return $this->page < $this->getLastPage() ? $this->page + 1 : $this->getLastPage();
+    }
 
-   /**
-    * Returns the last page number
-    * 
-    * @return int 
-    */
-   public function getLastPage()
-   {
-      return ceil($this->adapter->getTotalResults() / $this->limit);
-   }
+    /**
+     * Returns the previous page number
+     * 
+     * @return int 
+     */
+    public function getPreviousPage()
+    {
+        return $this->page > $this->getFirstPage() ? $this->page - 1 : $this->getFirstPage();
+    }
 
-   /**
-    * Returns true if the current page is first
-    * 
-    * @return boolean 
-    */
-   public function isFirstPage()
-   {
-      return $this->page == 1;
-   }
+    /**
+     * Returns the first page number
+     * 
+     * @return int 
+     */
+    public function getFirstPage()
+    {
+        return 1;
+    }
 
-   /**
-    * Returns true if the current page is last
-    * 
-    * @return boolean
-    */
-   public function isLastPage()
-   {
-      return $this->page == $this->getLastPage();
-   }
+    /**
+     * Returns the last page number
+     * 
+     * @return int 
+     */
+    public function getLastPage()
+    {
+        return ceil($this->adapter->getTotalResults() / $this->limit);
+    }
 
-   /**
-    * Returns true if the current resultset requires pagination
-    * 
-    * @return boolean 
-    */
-   public function isPaginable()
-   {
-      return $this->adapter->getTotalResults() > $this->limit;
-   }
+    /**
+     * Returns true if the current page is first
+     * 
+     * @return boolean 
+     */
+    public function isFirstPage()
+    {
+        return $this->page == 1;
+    }
 
-   /**
-    * Returns the current adapter instance
-    * 
-    * @return mixed 
-    */
-   public function getAdapter()
-   {
-      return $this->adapter;
-   }
+    /**
+     * Returns true if the current page is last
+     * 
+     * @return boolean
+     */
+    public function isLastPage()
+    {
+        return $this->page == $this->getLastPage();
+    }
 
-   /**
-    * Generates a page list 
-    * 
-    * @param int $pages Number of pages to generate
-    * @return array The page list 
-    */
-   public function getPages($pages = 10)
-   {
-      $tmp = $this->page - floor($pages / 2);
+    /**
+     * Returns true if the current resultset requires pagination
+     * 
+     * @return boolean 
+     */
+    public function isPaginable()
+    {
+        return $this->adapter->getTotalResults() > $this->limit;
+    }
 
-      $begin = $tmp > $this->getFirstPage() ? $tmp : $this->getFirstPage();
+    /**
+     * Returns true if the current resultset has 1 or more results
+     *
+     * @return boolean 
+     */
+    public function hasResults()
+    {
+        return $this->adapter->getTotalResults() > 0;
+    }
 
-      $end = min($begin + $pages - 1, $this->getLastPage());
+    /**
+     * Returns the current adapter instance
+     * 
+     * @return mixed 
+     */
+    public function getAdapter()
+    {
+        return $this->adapter;
+    }
 
-      return range($begin, $end, 1);
-   }
+    /**
+     * Generates a page list 
+     * 
+     * @param int $pages Number of pages to generate
+     * @return array The page list 
+     */
+    public function getPages($pages = 10)
+    {
+        $tmp = $this->page - floor($pages / 2);
 
-   /**
-    *
-    * Returns results list for the current page and limit
-    * 
-    * @return array 
-    */
-   public function getResults()
-   {
-      return $this->adapter->getResults(($this->page - 1) * $this->limit, $this->limit);
-   }
+        $begin = $tmp > $this->getFirstPage() ? $tmp : $this->getFirstPage();
+
+        $end = min($begin + $pages - 1, $this->getLastPage());
+
+        return range($begin, $end, 1);
+    }
+
+    /**
+     *
+     * Returns results list for the current page and limit
+     * 
+     * @return array 
+     */
+    public function getResults()
+    {
+        $offset = ($this->page - 1) * $this->limit;
+        return $this->adapter->getResults($offset, $this->limit);
+    }
 }
