@@ -83,8 +83,8 @@ class Pager
     public function setLimit($limit)
     {
         $this->limit = min($limit > 0 ? $limit : 1, $this->adapter->getTotalResults());
-        if ($limit <= 0)
-            $limit = 1;
+        if ($this->limit <= 0)
+            $this->limit = 1;
 
         $this->setPage($this->page);
 
