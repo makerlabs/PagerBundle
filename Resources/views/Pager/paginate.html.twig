@@ -1,21 +1,21 @@
 <ul class="pager">
    {% if pager.isFirstPage == false %}    
-      <li class="first"><a href="{{ paginate_path(route, pager.getFirstPage, parameters) }}">&laquo;</a></li>
-      <li class="previous"><a href="{{ paginate_path(route, pager.getPreviousPage, parameters) }}">&lsaquo;</a></li>
+        <li class="first"><a href="{{ paginate_path(route, pager.getFirstPage, parameters) }}">&laquo;</a></li>
+        <li class="previous"><a href="{{ paginate_path(route, pager.getPreviousPage, parameters) }}">&lsaquo;</a></li>
    {% endif %}
    {% for page in pager.getPages %}
       {% if page == pager.getPage %}
-         <li class="selected">
+        <li class="selected">
             <b>{{ page }}</b>
-         </li>      
+        </li>      
       {% else %}
-         <li>
+        <li>
             <a href="{{ paginate_path(route, page, parameters) }}">{{ page }}</a>
-         </li>
+        </li>
       {% endif %}
    {% endfor %}  
    {% if pager.isLastPage == false %}
-      <li class="next"><a href="{{ paginate_path(route, pager.getNextPage, parameters) }}">&rsaquo;</a></li>
-      <li class="last"><a href="{{ paginate_path(route, pager.getLastPage, parameters) }}">&raquo;</a></li>
+        <li class="next"><a href="{{ paginate_path(route, pager.getNextPage, parameters) }}">&rsaquo;</a></li>
+        <li class="last"><a href="{{ paginate_path(route, pager.getLastPage, parameters) }}">&raquo;</a></li>
    {% endif %}
 </ul>

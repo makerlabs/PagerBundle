@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the PagerBundle package.
  *
@@ -16,18 +17,18 @@ namespace MakerLabs\PagerBundle\Adapter;
  * @author Marcin Butlak <contact@maker-labs.com>
  */
 interface PagerAdapterInterface
-{   
-   /**
-    * Returns the list of results 
-    * 
-    * @return array 
-    */
-   function getResults($offset, $limit);
-   
-   /**
-    * Returns the total number of results
-    * 
-    * @return integer
-    */   
-   function getTotalResults();
+{
+    /**
+     * Returns the list of results 
+     * 
+     * @return array 
+     */
+    function getResults($offset, $limit);
+
+    /**
+     * Returns the total number of results
+     * 
+     * @return integer
+     */
+    function getTotalResults();
 }
