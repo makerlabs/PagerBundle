@@ -25,11 +25,12 @@ class Pager
      * @var integer
      */
     protected $page = 1;
+
     /**
      *
      * @var integer
      */
-    protected $limit;
+    protected $limit = 20;
 
     /**
      * Constructor
@@ -41,7 +42,9 @@ class Pager
     {
         $this->adapter = $adapter;
 
-        $this->setLimit(isset($options['limit']) ? $options['limit'] : 20);
+        if (isset($options['limit'])) {
+            $this->setLimit($options['limit']);
+        }
 
         if (isset($options['page'])) {
             $this->setPage($options['page']);
@@ -207,7 +210,7 @@ class Pager
     /**
      * Returns the current adapter instance
      * 
-     * @return mixed 
+     * @return PagerAdapterInterface 
      */
     public function getAdapter()
     {
