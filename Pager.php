@@ -31,7 +31,13 @@ class Pager
      * @var integer
      */
     protected $limit = 20;
-
+    
+     /**
+      * 
+      * @var integer
+      */
+     protected $maxPages = 10;
+     
     /**
      * Constructor
      * 
@@ -48,6 +54,10 @@ class Pager
 
         if (isset($options['page'])) {
             $this->setPage($options['page']);
+        }
+        
+        if (isset($options['max_pages'])) {
+            $this->setMaxPages($options['max_pages']);
         }
     }
 
@@ -98,6 +108,30 @@ class Pager
     {
         return $this->limit;
     }
+    
+        
+     /**
+      * Sets the number of pages shown
+      * 
+      * @param integer
+      * @return Pager instance
+      */
+     public function setMaxPages($maxPages)
+     {
+         $this->maxPages = $maxPages;
+ 
+         return $this;
+     }
+ 
+     /**
+      * Returns the number of pages shown
+      * 
+      * @return integer 
+      */
+     public function getMaxPages()
+     {
+         return $this->maxPages;
+     }
 
     /**
      * Returns the next page number
@@ -175,8 +209,10 @@ class Pager
      * @param integer $pages Number of pages to generate
      * @return array The page list 
      */
-    public function getPages($pages = 10)
+    public function getPages()
     {
+        $pages = $this->getMaxPages();
+        
         $tmp = $this->page - floor($pages / 2);
 
         $begin = $tmp > $this->getFirstPage() ? $tmp : $this->getFirstPage();
