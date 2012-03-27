@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="maker_labs_pager.adapter.doctrine_orm.class">MakerLabs\PagerBundle\Adapter\DoctrineOrmAdapter</parameter>
+        <parameter key="maker_labs_pager.adapter.array.class">MakerLabs\PagerBundle\Adapter\ArrayAdapter</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="maker_labs_pager.adapter.doctrine_orm" class="%maker_labs_pager.adapter.doctrine_orm.class%" scope="prototype" />
+
+        <service id="maker_labs_pager.adapter.array" class="%maker_labs_pager.adapter.array.class%" scope="prototype" />
+    </services>
+
+</container>

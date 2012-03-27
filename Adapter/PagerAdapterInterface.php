@@ -31,4 +31,9 @@ interface PagerAdapterInterface
      * @return integer
      */
     function getTotalResults();
+
+    /**
+     * Returns the total number of results for the current offset & limit
+     */
+    function countResults($offset = null, $limit = null);
 }

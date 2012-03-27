@@ -5,19 +5,33 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <!-- provided by config -->
+        <parameter key="maker_labs_pager.pager.limit" />
+        <parameter key="maker_labs_pager.pager.max_pages" />
+        <parameter key="maker_labs_pager.pager.template" />
+        <!-- hardcoded -->
         <parameter key="makerlabs.templating.helper.pager.class">MakerLabs\PagerBundle\Templating\Helper\PagerHelper</parameter>
         <parameter key="makerlabs.twig.extension.pager.class">MakerLabs\PagerBundle\Twig\Extension\PagerExtension</parameter>
+        <parameter key="maker_labs_pager.pager.class">MakerLabs\PagerBundle\Pager</parameter>
     </parameters>
 
     <services>
         <service id="makerlabs.twig.extension.pager" class="%makerlabs.twig.extension.pager.class%">
-            <argument type="service" id="router" />
+            <argument type="service" id="service_container" />
             <tag name="twig.extension" alias="pager" />
-        </service>        
+        </service>
         <service id="makerlabs.templating.helper.pager" class="%makerlabs.templating.helper.pager.class%">
-            <tag name="templating.helper" alias="pager" />
-            <argument type="service" id="templating.engine.php" />
+            <argument type="service" id="templating" />
             <argument type="service" id="router" />
+            <argument type="string">%maker_labs_pager.pager.template%</argument>
+            <tag name="templating.helper" alias="pager" />
+        </service>
+        <service id="maker_labs_pager.pager" class="%maker_labs_pager.pager.class%" scope="prototype">
+            <argument />
+            <argument type="collection">
+                <argument key="limit">%maker_labs_pager.pager.limit%</argument>
+                <argument key="max_pages">%maker_labs_pager.pager.max_pages%</argument>
+            </argument>
         </service>
     </services>
 

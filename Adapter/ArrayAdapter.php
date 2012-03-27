@@ -20,19 +20,39 @@ use MakerLabs\PagerBundle\Adapter\PagerAdapterInterface;
  */
 class ArrayAdapter implements PagerAdapterInterface, \Iterator, \ArrayAccess, \Countable
 {
+    /**
+     * @var array
+     */
     protected $array;
-    protected $cursor = 0;
-    protected $totalItems = null;
 
-    public function __construct(array $array)
+    /**
+     * @var int
+     */
+    protected $cursor = 0;
+
+    /**
+     * @var int
+     */
+    protected $totalItems;
+
+    public function __construct(array $array = null)
     {
-        $this->array = $array;
+        if(null !== $array) {
+            $this->setArray($array);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    function countResults($offset = null, $limit = null) {
+        return count(array_slice($this->array, $offset, $limit));
     }
 
     public function getTotalResults()
     {
         if (null === $this->totalItems) {
-            $this->totalItems = count($this->array);
+            $this->totalItems = $this->countResults();
         }
 
         return $this->totalItems;
@@ -98,5 +118,24 @@ class ArrayAdapter implements PagerAdapterInterface, \Iterator, \ArrayAccess, \C
     public function count()
     {
         return $this->getTotalResults();
+    }
+
+    /**
+     * Set the array
+     * @param $array
+     * @return ArrayAdapter Provides a fluent interface
+     */
+    public function setArray($array) {
+        $this->array = $array;
+        $this->totalItems = null;
+        return $this;
+    }
+
+    /**
+     * Get the array
+     * @return array
+     */
+    public function getArray() {
+        return $this->array;
     }
 }

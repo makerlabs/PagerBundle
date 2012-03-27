@@ -27,11 +27,11 @@ class PagerHelper extends Helper
      * @var EngineInterface
      */
     protected $engine;
+
     /**
-     *
-     * @var RouterInterface
+     * @var string
      */
-    protected $router;
+    protected $template;
 
     /**
      * Constructor
@@ -39,8 +39,10 @@ class PagerHelper extends Helper
      * @param EngineInterface $engine The template engine service
      * @param RouterInterface $router The router service
      */
-    public function __construct(EngineInterface $engine, RouterInterface $router)
+    public function __construct(EngineInterface $engine, RouterInterface $router, $template = null)
     {
+        $this->template = $template ?: 'MakerLabsPagerBundle:Pager:paginate.html.php';
+
         $this->engine = $engine;
 
         $this->router = $router;
@@ -48,15 +50,17 @@ class PagerHelper extends Helper
 
     /**
      * Renders the HTML for a given pager
-     * 
+     *
      * @param Pager $pager A Pager instance
      * @param string $route The route name
      * @param array $parameters Additional route parameters
      * @param string $template The template name
-     * @return string The html markup 
+     * @return string The html markup
      */
-    public function paginate(Pager $pager, $route, array $parameters = array(), $template = 'MakerLabsPagerBundle:Pager:paginate.html.php')
+    public function paginate(Pager $pager, $route, array $parameters = array(), $template = null)
     {
+        $template = $template ?: $this->template;
+
         return $this->engine->render($template, array('pager' => $pager, 'route' => $route, 'parameters' => $parameters));
     }
 

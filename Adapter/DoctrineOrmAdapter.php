@@ -18,17 +18,32 @@ use Doctrine\ORM\QueryBuilder;
  * 
  * @author Marcin Butlak <contact@maker-labs.com>
  */
-class DoctrineOrmAdapter implements PagerAdapterInterface
+class DoctrineOrmAdapter implements PagerAdapterInterface, \Countable
 {
-    protected $query;
+    /**
+     * @var \Doctrine\ORM\QueryBuilder
+     */
+    protected $queryBuilder;
+
+    /**
+     * @var string
+     */
     protected $hydrationMode;
-    protected $totalResults = null;
 
-    public function __construct(QueryBuilder $query, $hydration_mode = null)
+    /**
+     * @var int
+     */
+    protected $totalResults;
+
+    /**
+     * @var array
+     */
+    protected $countCache = array();
+
+    public function __construct(QueryBuilder $queryBuilder = null, $hydrationMode = null)
     {
-        $this->query = $query;
-
-        $this->hydrationMode = $hydration_mode;
+        $this->setQueryBuilder($queryBuilder)
+             ->setHydrationMode($hydrationMode);
     }
 
     /**
@@ -36,27 +51,56 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
      * 
      * @return QueryBuilder
      */
-    public function getCountQuery()
+    public function getCountQuery($offset = null, $limit = null)
     {
-        $a = $this->query->getRootAlias();
+        $queryBuilder = $this->getQueryBuilder();
+        if(null === $queryBuilder) {
+            throw new \Exception('No queryBuilder is set for this adapter.');
+        }
 
-        $qb = clone $this->query;
+        $aliases = $queryBuilder->getRootAliases();
+        $alias = $aliases[0];
 
-        return $qb->select('COUNT(' . $a . ')')->resetDQLPart('orderBy')->setMaxResults(null)->setFirstResult(null);
+        $qb = clone $queryBuilder;
+
+        return $qb->select('COUNT(' . $alias . ')')->resetDQLPart('orderBy')->setMaxResults($limit)->setFirstResult($offset);
     }
 
     /**
      * Returns the total number of results
      * 
-     * @return integer
+     * @return int
      */
     public function getTotalResults()
     {
         if (null === $this->totalResults) {
-            $this->totalResults = $this->getCountQuery()->getQuery()->getSingleScalarResult();
+            $this->totalResults = $this->countResults();
+        }
+        return $this->totalResults;
+    }
+
+    /**
+     * Count results
+     * @param int|null $offset
+     * @param int|null $limit
+     * @return int
+     */
+    public function countResults($offset = null, $limit = null) {
+        if(null === $this->getQueryBuilder()) {
+            return 0;
         }
 
-        return $this->totalResults;
+        if(isset($this->countCache[$offset."-".$limit])) {
+            return $this->countCache[$offset."-".$limit];
+        }
+        return $this->getCountQuery($offset, $limit)->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function count() {
+        return $this->getTotalResults();
     }
 
     /**
@@ -66,6 +110,44 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
      */
     public function getResults($offset, $limit)
     {
-        return $this->query->setFirstResult($offset)->setMaxResults($limit)->getQuery()->execute(array(), $this->hydrationMode);
+        return $this->queryBuilder->setFirstResult($offset)->setMaxResults($limit)->getQuery()->execute(array(), $this->getHydrationMode());
+    }
+
+    /**
+     * Set the hydation mode
+     * @param string $hydrationMode
+     * @return DoctrineOrmAdapter Provides a fluent interface
+     */
+    public function setHydrationMode($hydrationMode) {
+        $this->hydrationMode = $hydrationMode;
+        return $this;
+    }
+
+    /**
+     * Get the hydration mode
+     * @return string
+     */
+    public function getHydrationMode() {
+        return $this->hydrationMode;
+    }
+
+    /**
+     * Set a new QueryBuilder
+     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
+     * @return DoctrineOrmAdapter Provides a fluent interface
+     */
+    public function setQueryBuilder($queryBuilder) {
+        $this->queryBuilder = $queryBuilder;
+        $this->countCache = array();
+        $this->totalResults = null;
+
+        return $this;
+    }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getQueryBuilder() {
+        return $this->queryBuilder;
     }
 }
