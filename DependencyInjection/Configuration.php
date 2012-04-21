@@ -20,10 +20,13 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('maker_labs_pager');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
+        $rootNode
+            ->children()
+                ->scalarNode('limit')->defaultValue('20')->end()
+                ->scalarNode('max_pages')->defaultValue('10')->end()
+                ->scalarNode('template')->defaultNull()->end()
+            ->end()
+            ;
         return $treeBuilder;
     }
 }

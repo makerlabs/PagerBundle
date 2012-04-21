@@ -14,6 +14,7 @@ namespace MakerLabs\PagerBundle\Twig\Extension;
 use MakerLabs\PagerBundle\Pager;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use MakerLabs\PagerBundle\Templating\Helper\PagerHelper;
 
 /**
  * PagerExtension extends Twig with pagination capabilities.
@@ -22,25 +23,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PagerExtension extends \Twig_Extension
 {
-    /**
-     *
-     * @var RouterInterface
-     */
-    protected $router;
-    /**
-     *
-     * @var \Twig_Environment
-     */
-    protected $environment;
+    protected $container;
 
-    public function __construct(RouterInterface $router)
-    {
-        $this->router = $router;
-    }
-
-    public function initRuntime(\Twig_Environment $environment)
-    {
-        $this->environment = $environment;
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
     }
 
     public function getFunctions()
@@ -51,22 +40,25 @@ class PagerExtension extends \Twig_Extension
         );
     }
 
-    public function paginate(Pager $pager, $route, array $parameters = array(), $template = 'MakerLabsPagerBundle:Pager:paginate.html.twig')
+    public function paginate(Pager $pager, $route, array $parameters = array(), $template = null)
     {
-        return $this->environment->render($template, array('pager' => $pager, 'route' => $route, 'parameters' => $parameters));
+        $template = $template ?: $this->container->getParameter('maker_labs_pager.pager.template') ?: 'MakerLabsPagerBundle:Pager:paginate.html.php';
+
+        return $this->container->get('makerlabs.templating.helper.pager')->paginate(
+            $pager,
+            $route,
+            $parameters,
+            $template
+        );
     }
 
     public function path($route, $page, array $parameters = array())
     {
-        if (isset($parameters['_page'])) {
-            $parameters[$parameters['_page']] = $page;
-
-            unset($parameters['_page']);
-        } else {
-            $parameters['page'] = $page;
-        }
-
-        return $this->router->generate($route, $parameters);
+        return $this->container->get('makerlabs.templating.helper.pager')->path(
+            $route,
+            $page,
+            $parameters
+        );
     }
 
     public function getName()

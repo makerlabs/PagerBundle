@@ -18,7 +18,7 @@ use MakerLabs\PagerBundle\Adapter\PagerAdapterInterface;
  * 
  * @author Marcin Butlak <contact@maker-labs.com>
  */
-class Pager
+class Pager implements \Countable, \IteratorAggregate
 {
     /**
      *
@@ -27,26 +27,31 @@ class Pager
     protected $page = 1;
 
     /**
-     *
      * @var integer
      */
     protected $limit = 20;
-    
-     /**
-      * 
-      * @var integer
-      */
-     protected $maxPages = 10;
-     
+
+    /**
+     * @var integer
+     */
+    protected $maxPages = 10;
+
+    /**
+     * @var PagerAdapterInterface
+     */
+    protected $adapter;
+
     /**
      * Constructor
      * 
      * @param PagerAdapterInterface $adapter The pager adapter
      * @param array $options Additional options
      */
-    public function __construct(PagerAdapterInterface $adapter, array $options = array())
+    public function __construct(PagerAdapterInterface $adapter = null, array $options = array())
     {
-        $this->adapter = $adapter;
+        if(null !== $adapter) {
+            $this->setAdapter($adapter);
+        }
 
         if (isset($options['limit'])) {
             $this->setLimit($options['limit']);
@@ -59,6 +64,31 @@ class Pager
         if (isset($options['max_pages'])) {
             $this->setMaxPages($options['max_pages']);
         }
+
+    }
+
+    /**
+     * Get the number results in the current page
+     * @return int
+     */
+    public function count() {
+        return $this->adapter->countResults(($this->getPage() - 1) * $this->limit, $this->limit);
+    }
+
+    /**
+     * Get the number of pages of results
+     * @return int
+     */
+    public function getPageCount() {
+        return ceil($this->getAdapter()->getTotalResults() / $this->getLimit());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIterator() {
+        return new \ArrayIterator($this->getResults());
     }
 
     /**
@@ -69,7 +99,7 @@ class Pager
      */
     public function setPage($page)
     {
-        $this->page = min($page > 0 ? $page : $this->getFirstPage(), $this->getLastPage());
+        $this->page = $page;
 
         return $this;
     }
@@ -81,7 +111,10 @@ class Pager
      */
     public function getPage()
     {
-        return $this->page;
+        $page = $this->page ?: $this->getFirstPage();
+        $page = min($page, $this->getLastPage());
+
+        return $page;
     }
 
     /**
@@ -93,8 +126,6 @@ class Pager
     public function setLimit($limit)
     {
         $this->limit = $limit > 0 ? $limit : 1;
-
-        $this->setPage($this->page);
 
         return $this;
     }
@@ -140,7 +171,7 @@ class Pager
      */
     public function getNextPage()
     {
-        return $this->page < $this->getLastPage() ? $this->page + 1 : $this->getLastPage();
+        return $this->getPage() < $this->getLastPage() ? $this->getPage() + 1 : $this->getLastPage();
     }
 
     /**
@@ -150,7 +181,7 @@ class Pager
      */
     public function getPreviousPage()
     {
-        return $this->page > $this->getFirstPage() ? $this->page - 1 : $this->getFirstPage();
+        return $this->getPage() > $this->getFirstPage() ? $this->getPage() - 1 : $this->getFirstPage();
     }
 
     /**
@@ -160,7 +191,7 @@ class Pager
      */
     public function isFirstPage()
     {
-        return $this->page == 1;
+        return $this->getPage() == 1;
     }
 
     /**
@@ -180,7 +211,7 @@ class Pager
      */
     public function isLastPage()
     {
-        return $this->page == $this->getLastPage();
+        return $this->getPage() == $this->getLastPage();
     }
 
     /**
@@ -196,7 +227,7 @@ class Pager
     /**
      * Returns true if the current result set requires pagination
      * 
-     * @return boolean 
+     * @return boolean
      */
     public function isPaginable()
     {
@@ -213,7 +244,7 @@ class Pager
     {
         $pages = $this->getMaxPages();
         
-        $tmp = $this->page - floor($pages / 2);
+        $tmp = $this->getPage() - floor($pages / 2);
 
         $begin = $tmp > $this->getFirstPage() ? $tmp : $this->getFirstPage();
 
@@ -240,7 +271,7 @@ class Pager
      */
     public function getResults()
     {
-        return $this->hasResults() ? $this->adapter->getResults(($this->page - 1) * $this->limit, $this->limit) : array();
+        return $this->hasResults() ? $this->adapter->getResults(($this->getPage() - 1) * $this->limit, $this->limit) : array();
     }
 
     /**
@@ -252,4 +283,15 @@ class Pager
     {
         return $this->adapter;
     }
+
+    /**
+     * Set the adapter to use
+     * @param PagerAdapterInterface $adapter
+     * @return Pager Provides a fluent interface
+     */
+    public function setAdapter($adapter) {
+        $this->adapter = $adapter;
+        return $this;
+    }
+
 }
