@@ -53,7 +53,7 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
     public function getTotalResults()
     {
         if (null === $this->totalResults) {
-            $this->totalResults = $this->getCountQuery()->getQuery()->getSingleScalarResult();
+            $this->totalResults = count($this->getCountQuery()->getQuery()->execute(array(), $this->hydrationMode));
         }
 
         return $this->totalResults;
