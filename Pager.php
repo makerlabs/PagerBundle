@@ -213,11 +213,13 @@ class Pager
     {
         $pages = $this->getMaxPages();
         
-        $tmp = $this->page - floor($pages / 2);
+        $tmp = $this->page - floor($pages / 2) + 1;
 
-        $begin = $tmp > $this->getFirstPage() ? $tmp : $this->getFirstPage();
+        $start = $tmp > $this->getFirstPage() ? $tmp : $this->getFirstPage();
 
-        $end = min($begin + $pages - 1, $this->getLastPage());
+        $end = min($start + $pages - 1, $this->getLastPage());
+        
+        $begin = ($end - $pages + 1) > $this->getFirstPage() ? $end - $pages + 1 : $this->getFirstPage();
 
         return range($begin, $end, 1);
     }
