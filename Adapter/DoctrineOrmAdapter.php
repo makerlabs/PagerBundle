@@ -42,7 +42,12 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
 
         $qb = clone $this->query;
 
-        return $qb->select('COUNT(' . $a . ')')->resetDQLPart('orderBy')->setMaxResults(null)->setFirstResult(null);
+        return $qb
+            ->select($qb->getDQLPart('distinct') ? $qb->expr()->countDistinct($a) : $qb->expr()->count($a))
+            ->resetDQLParts(array('orderBy', 'distinct'))
+            ->setMaxResults(null)
+            ->setFirstResult(null)
+        ;        
     }
 
     /**
