@@ -1,0 +1,25 @@
+{
+    "name": "makerlabs/pager-bundle",
+    "type": "symfony-bundle",
+    "description": "Paginator Bundle for Symfony2.",
+    "keywords": ["pager", "symfony2", "twig"],
+    "homepage": "https://github.com/makerlabs/PagerBundle",
+    "license": "MIT",
+    "authors": [
+	{
+	    "name": "MakerLabs"
+	}
+    ],
+    "require": {
+        "php":                       ">=5.3.2",
+        "symfony/framework-bundle":  ">=2.0.0",
+        "twig/twig":                 ">=1.9.1,<2.0-dev"
+    },
+    "replace": {
+        "makerlabs/PagerBundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "MakerLabs\\Bundle\\PagerBundle": "" }
+    },
+    "target-dir": "MakerLabs/Bundle/PagerBundle"
+}
