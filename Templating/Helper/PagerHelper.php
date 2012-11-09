@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace MakerLabs\PagerBundle\Templating\Helper;
+namespace MakerLabs\Bundle\PagerBundle\Templating\Helper;
 
 use Symfony\Component\Templating\Helper\Helper;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
-use MakerLabs\PagerBundle\Pager;
+use MakerLabs\Bundle\PagerBundle\Pager;
 
 /**
  * 

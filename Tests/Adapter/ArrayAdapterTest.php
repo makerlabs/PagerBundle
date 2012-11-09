@@ -1,8 +1,8 @@
 <?php
 
-namespace MakerLabs\PagerBundle\Test\Adapter;
+namespace MakerLabs\Bundle\PagerBundle\Test\Adapter;
 
-use MakerLabs\PagerBundle\Adapter\ArrayAdapter;
+use MakerLabs\Bundle\PagerBundle\Adapter\ArrayAdapter;
 
 class ArrayAdapterTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace MakerLabs\PagerBundle\DependencyInjection;
+namespace MakerLabs\Bundle\PagerBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
