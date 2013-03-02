@@ -35,7 +35,7 @@ class PagerTest extends \PHPUnit_Framework_TestCase
         $this->adapter = $this->getMock('MakerLabs\PagerBundle\Adapter\PagerAdapterInterface');
 
         $this->adapter->expects($this->any())
-                ->method('getTotalResults')
+                ->method('count')
                 ->will($this->returnValue(100));
 
         $this->pager = new Pager($this->adapter);
@@ -55,7 +55,7 @@ class PagerTest extends \PHPUnit_Framework_TestCase
         $adapter = $this->getMock('MakerLabs\PagerBundle\Adapter\PagerAdapterInterface');
 
         $adapter->expects($this->any())
-                ->method('getTotalResults')
+                ->method('count')
                 ->will($this->returnValue(0));
 
         $pager = new Pager($adapter);

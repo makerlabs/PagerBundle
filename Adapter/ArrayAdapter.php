@@ -18,24 +18,24 @@ use MakerLabs\PagerBundle\Adapter\PagerAdapterInterface;
  * 
  * @author Marcin Butlak <contact@maker-labs.com>
  */
-class ArrayAdapter implements PagerAdapterInterface, \Iterator, \ArrayAccess, \Countable
+class ArrayAdapter implements PagerAdapterInterface, \Iterator, \ArrayAccess
 {
     protected $array;
     protected $cursor = 0;
-    protected $totalItems = null;
+    protected $count = null;
 
     public function __construct(array $array)
     {
         $this->array = $array;
     }
 
-    public function getTotalResults()
+    public function count()
     {
-        if (null === $this->totalItems) {
-            $this->totalItems = count($this->array);
+        if (null === $this->count) {
+            $this->count = count($this->array);
         }
 
-        return $this->totalItems;
+        return $this->count;
     }
 
     public function getResults($offset, $limit)
@@ -93,10 +93,5 @@ class ArrayAdapter implements PagerAdapterInterface, \Iterator, \ArrayAccess, \C
     public function valid()
     {
         return $this->offsetExists($this->cursor);
-    }
-
-    public function count()
-    {
-        return $this->getTotalResults();
     }
 }

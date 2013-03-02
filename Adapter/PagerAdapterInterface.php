@@ -16,7 +16,7 @@ namespace MakerLabs\PagerBundle\Adapter;
  * 
  * @author Marcin Butlak <contact@maker-labs.com>
  */
-interface PagerAdapterInterface
+interface PagerAdapterInterface extends \Countable
 {
     /**
      * Returns the list of results 
@@ -24,11 +24,4 @@ interface PagerAdapterInterface
      * @return array 
      */
     function getResults($offset, $limit);
-
-    /**
-     * Returns the total number of results
-     * 
-     * @return integer
-     */
-    function getTotalResults();
 }

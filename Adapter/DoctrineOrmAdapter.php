@@ -20,13 +20,15 @@ use Doctrine\ORM\QueryBuilder;
  */
 class DoctrineOrmAdapter implements PagerAdapterInterface
 {
-    protected $query;
+    protected $queryBuilder;
     protected $hydrationMode;
-    protected $totalResults = null;
+    protected $countQueryBuilder = null;
+    protected $query = null;
+    protected $count = null;
 
-    public function __construct(QueryBuilder $query, $hydration_mode = null)
+    public function __construct(QueryBuilder $qb, $hydration_mode = null)
     {
-        $this->query = $query;
+        $this->queryBuilder = $qb;
 
         $this->hydrationMode = $hydration_mode;
     }
@@ -36,13 +38,30 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
      * 
      * @return QueryBuilder
      */
-    public function getCountQuery()
+    public function getCountQueryBuilder()
     {
-        $a = $this->query->getRootAlias();
+        if (null === $this->countQueryBuilder || $this->queryBuilder->getState() == QueryBuilder::STATE_DIRTY) {
+            $a = $this->queryBuilder->getRootAlias();
 
-        $qb = clone $this->query;
+            $qb = clone $this->queryBuilder;
 
-        return $qb->select('COUNT(' . $a . ')')->resetDQLPart('orderBy')->setMaxResults(null)->setFirstResult(null);
+            if ($qb->getDQLPart('groupBy')) {
+                $qb->resetDQLPart('groupBy')->select('COUNT(DISTINCT ' . $a . ')');
+            } else {
+                $qb->select('COUNT(' . $a . ')');   
+            }
+
+            $qb->resetDQLPart('orderBy')->setMaxResults(null)->setFirstResult(null);
+
+            $this->countQueryBuilder = $qb;
+        }
+
+        return $this->countQueryBuilder;
+    }
+
+    public function getQueryBuilder()
+    {
+        return $this->queryBuilder;
     }
 
     /**
@@ -50,13 +69,14 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
      * 
      * @return integer
      */
-    public function getTotalResults()
+    public function count()
     {
-        if (null === $this->totalResults) {
-            $this->totalResults = $this->getCountQuery()->getQuery()->getSingleScalarResult();
+        if (null === $this->count || $this->getCountQueryBuilder()->getState() == QueryBuilder::STATE_DIRTY) {
+            $this->count = $this->getCountQueryBuilder()->getQuery()->getSingleScalarResult();
+            $this->getQuery();
         }
 
-        return $this->totalResults;
+        return $this->count;
     }
 
     /**
@@ -66,6 +86,15 @@ class DoctrineOrmAdapter implements PagerAdapterInterface
      */
     public function getResults($offset, $limit)
     {
-        return $this->query->setFirstResult($offset)->setMaxResults($limit)->getQuery()->execute(array(), $this->hydrationMode);
+        return $this->getQuery()->setFirstResult($offset)->setMaxResults($limit)->execute(array(), $this->hydrationMode);
+    }
+
+    protected function getQuery()
+    {
+        if (null === $this->query || $this->queryBuilder->getState() == QueryBuilder::STATE_DIRTY) {
+            $this->query = $this->queryBuilder->getQuery();
+        }
+
+        return $this->query;
     }
 }
