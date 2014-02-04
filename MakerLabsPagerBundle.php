@@ -1,6 +1,6 @@
 <?php
 
-namespace MakerLabs\PagerBundle;
+namespace MakerLabs\Bundle\PagerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

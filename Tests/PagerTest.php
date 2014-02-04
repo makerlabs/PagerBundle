@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace MakerLabs\PagerBundle\Test;
+namespace MakerLabs\Bundle\PagerBundle\Test;
 
-use MakerLabs\PagerBundle\Pager;
+use MakerLabs\Bundle\PagerBundle\Pager;
 
 /**
  * 
@@ -32,7 +32,7 @@ class PagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adapter = $this->getMock('MakerLabs\PagerBundle\Adapter\PagerAdapterInterface');
+        $this->adapter = $this->getMock('MakerLabs\Bundle\PagerBundle\Adapter\PagerAdapterInterface');
 
         $this->adapter->expects($this->any())
                 ->method('count')
@@ -52,7 +52,7 @@ class PagerTest extends \PHPUnit_Framework_TestCase
 
     public function testNoResults()
     {
-        $adapter = $this->getMock('MakerLabs\PagerBundle\Adapter\PagerAdapterInterface');
+        $adapter = $this->getMock('MakerLabs\Bundle\PagerBundle\Adapter\PagerAdapterInterface');
 
         $adapter->expects($this->any())
                 ->method('count')

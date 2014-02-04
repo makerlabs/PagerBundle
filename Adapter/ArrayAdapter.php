@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace MakerLabs\PagerBundle\Adapter;
+namespace MakerLabs\Bundle\PagerBundle\Adapter;
 
-use MakerLabs\PagerBundle\Adapter\PagerAdapterInterface;
+use MakerLabs\Bundle\PagerBundle\Adapter\PagerAdapterInterface;
 
 /**
  * Pager array adapter

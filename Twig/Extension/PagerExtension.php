@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace MakerLabs\PagerBundle\Twig\Extension;
+namespace MakerLabs\Bundle\PagerBundle\Twig\Extension;
 
-use MakerLabs\PagerBundle\Pager;
+use MakerLabs\Bundle\PagerBundle\Pager;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

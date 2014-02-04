@@ -1,6 +1,6 @@
 <?php
 
-namespace MakerLabs\PagerBundle\DependencyInjection;
+namespace MakerLabs\Bundle\PagerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

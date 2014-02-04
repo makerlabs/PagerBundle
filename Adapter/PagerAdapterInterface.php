@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace MakerLabs\PagerBundle\Adapter;
+namespace MakerLabs\Bundle\PagerBundle\Adapter;
 
 /**
  * Pager adapter interface
