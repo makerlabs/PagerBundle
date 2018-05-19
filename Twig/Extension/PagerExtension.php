@@ -46,8 +46,8 @@ class PagerExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'paginate' => new \Twig_Function_Method($this, 'paginate', array('is_safe' => array('html'))),
-            'paginate_path' => new \Twig_Function_Method($this, 'path', array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('paginate', [$this, 'paginate'], array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('paginate_path', [$this, 'path'], array('is_safe' => array('html'))),
         );
     }
 
